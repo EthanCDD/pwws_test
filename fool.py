@@ -95,7 +95,7 @@ def fool_text_classifier():
         model = char_cnn(dataset)
     elif args.model == "word_lstm":
         model = lstm(dataset)
-    model_path = r'./runs/{}/{}.dat'.format(dataset, args.model)
+    model_path = r'runs/{}/{}.dat'.format(dataset, args.model)
     model.load_weights(model_path)
     print('model path:', model_path)
 

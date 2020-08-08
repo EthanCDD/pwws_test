@@ -54,7 +54,7 @@ def word_cnn(dataset, use_glove=False):
     model = Sequential()
 
     if use_glove:
-        file_path = r'./glove.6B.{}d.txt'.format(str(embedding_dims))
+        file_path = r'glove.6B.{}d.txt'.format(str(embedding_dims))
         get_embedding_index(file_path)
         get_embedding_matrix(dataset, num_words, embedding_dims)
         model.add(Embedding(  # Layer 0, Start

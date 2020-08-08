@@ -21,7 +21,7 @@ class Config(object):
 
     wordCNN_embedding_dims = {'imdb': 50, 'yahoo': 50, 'agnews': 50}
     bdLSTM_embedding_dims = {'imdb': 128, 'yahoo': 128, 'agnews': 128}
-    LSTM_embedding_dims = {'imdb': 100, 'agnews': 100}
+    LSTM_embedding_dims = {'imdb': 200, 'agnews': 100}
 
 
 config = Config()

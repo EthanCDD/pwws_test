@@ -64,7 +64,7 @@ def train_text_classifier():
     log_dir = r'./logs/{}/{}/'.format(dataset, args.model)
     tb_callback = keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=0, write_graph=True)
 
-    model_path = r'./runs/{}/{}.dat'.format(dataset, args.model)
+    model_path = r'runs/{}/{}.dat'.format(dataset, args.model)
     model = batch_size = epochs = None
     assert args.model[:4] == args.level
 

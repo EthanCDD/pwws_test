@@ -27,7 +27,7 @@ def read_imdb_files(filetype):
 
     all_texts = []
     file_list = []
-    path = r'./data_set/aclImdb/'
+    path = r'aclImdb/'
     pos_path = path + filetype + '/pos/'
     for file in os.listdir(pos_path):
         file_list.append(pos_path + file)
