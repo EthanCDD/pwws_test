@@ -148,6 +148,9 @@ def fool_text_classifier():
     mean_NE_rate = sum(NE_rate_list) / len(NE_rate_list)
     print('mean substitution rate:', mean_sub_rate)
     print('mean NE rate:', mean_NE_rate)
+    print('successful perturbations:', successful_perturbations)
+    print('failed perturbations:', failed_perturbations)
+    print('success rate:', successful_perturbations/(failed_perturbations+successful_perturbations))
     file_1.close()
     file_2.close()
 
