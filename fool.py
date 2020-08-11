@@ -80,9 +80,21 @@ def fool_text_classifier():
             x_train, y_train, x_test, y_test = char_process(train_texts, train_labels, test_texts, test_labels, dataset)
 
     # Write clean examples into a txt file
-    clean_texts_path = r'./fool_result/{}/clean_{}.txt'.format(dataset, str(clean_samples_cap))
-    if not os.path.isfile(clean_texts_path):
-        write_origin_input_texts(clean_texts_path, test_texts)
+    clean_path = '/content/drive/My Drive/PWWS_Pretrained'#r./fool_result/{}'.format(dataset, str(clean_samples_cap))
+    if not os.path.exists(clean_path):
+        os.mkdir(clean_path)
+    # if not os.path.isfile(clean_path):
+        write_origin_input_texts(os.path.join(clean_path, 'clean_1000.txt'), test_texts)
+        # write_origin_input_texts(os.path.join(clean_path, 'x_processed_1000'), x_test)
+        # write_origin_input_texts(os.path.join(clean_path, 'y_1000'), y_test)
+        np.save(os.path.join(clean_path, 'x_processed_1000.npy'), x_test)
+        np.save(os.path.join(clean_path, 'y_1000.npy'), y_test)
+    
+    with open(os.path.join(clean_path, 'clean_1000.txt'), 'r') as f:
+        test_texts = f.readlines()
+    x_test = np.load(os.path.join(clean_path, 'x_processed_1000.npy'))
+    y_test = np.load(os.path.join(clean_path, 'y_1000.npy'))
+    
 
     # Select the model and load the trained weights
     assert args.model[:4] == args.level
@@ -100,14 +112,14 @@ def fool_text_classifier():
     print('model path:', model_path)
 
     # evaluate classification accuracy of model on clean samples
-    scores_origin = model.evaluate(x_test[:clean_samples_cap], y_test[:clean_samples_cap])
+    scores_origin = model.evaluate(x_test, y_test)
     print('clean samples origin test_loss: %f, accuracy: %f' % (scores_origin[0], scores_origin[1]))
     all_scores_origin = model.evaluate(x_test, y_test)
     print('all origin test_loss: %f, accuracy: %f' % (all_scores_origin[0], all_scores_origin[1]))
 
     grad_guide = ForwardGradWrapper(model)
-    classes_prediction = grad_guide.predict_classes(x_test[: clean_samples_cap])
-
+    classes_prediction = grad_guide.predict_classes(x_test)
+    
     print('Crafting adversarial examples...')
     successful_perturbations = 0
     failed_perturbations = 0
@@ -119,7 +131,9 @@ def fool_text_classifier():
     change_tuple_path = r'./fool_result/{}/{}/change_tuple_{}.txt'.format(dataset, args.model, str(clean_samples_cap))
     file_1 = open(adv_text_path, "a")
     file_2 = open(change_tuple_path, "a")
+    
     for index, text in enumerate(test_texts[: clean_samples_cap]):
+        # print(text)
         sub_rate = 0
         NE_rate = 0
         if np.argmax(y_test[index]) == classes_prediction[index]:
